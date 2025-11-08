@@ -1,4 +1,4 @@
 [workspace]
 resolver = "3"
-members = ["aoc_lib"]
+members = ["aoc_lib", "aoc_runner"]
 
