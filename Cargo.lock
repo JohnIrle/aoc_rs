@@ -53,6 +53,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "aoc_2022"
+version = "0.1.0"
+dependencies = [
+ "aoc_lib",
+]
+
+[[package]]
 name = "aoc_lib"
 version = "0.1.0"
 
@@ -60,6 +67,7 @@ version = "0.1.0"
 name = "aoc_runner"
 version = "0.1.0"
 dependencies = [
+ "aoc_2022",
  "aoc_lib",
  "clap",
 ]
