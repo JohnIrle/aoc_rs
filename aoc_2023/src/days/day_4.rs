@@ -2,14 +2,12 @@ use aoc_lib::Solution;
 pub struct Day4;
 
 impl Solution for Day4 {
-    fn part1(&self, input: &str) -> String {
-        let part1_sum = total_points(input);
-        format!("{}", part1_sum)
+    fn part_1(&self, input: &str) -> String {
+        total_points(input).to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
-        let part2_sum = total_cards(input);
-        format!("{}", part2_sum)
+    fn part_2(&self, input: &str) -> String {
+        total_cards(input).to_string()
     }
 }
 
@@ -82,11 +80,11 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 
     #[test]
     fn test_part_1() {
-        assert_eq!(Day4.part1(INPUT), "13".to_string());
+        assert_eq!(Day4.part_1(INPUT), "13".to_string());
     }
 
     #[test]
     fn test_part_2() {
-        assert_eq!(Day4.part2(INPUT), "30".to_string());
+        assert_eq!(Day4.part_2(INPUT), "30".to_string());
     }
 }

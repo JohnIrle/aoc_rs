@@ -4,14 +4,12 @@ use std::collections::HashMap;
 pub struct Day5;
 
 impl Solution for Day5 {
-    fn part1(&self, input: &str) -> String {
-        let part1_sum = part_1(input);
-        format!("{}", part1_sum)
+    fn part_1(&self, input: &str) -> String {
+        part_1(input).to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
-        let part2_sum = part_2(input);
-        format!("{}", part2_sum)
+    fn part_2(&self, input: &str) -> String {
+        part_2(input).to_string()
     }
 }
 
@@ -170,14 +168,14 @@ mod tests {
 
     #[test]
     fn part_1_returns_143_with_sample() {
-        let result = Day5.part1(INPUT);
+        let result = Day5.part_1(INPUT);
 
         assert_eq!(result, "143".to_string());
     }
 
     #[test]
     fn part_2_returns_123_with_sample() {
-        let result = Day5.part2(INPUT);
+        let result = Day5.part_2(INPUT);
 
         assert_eq!(result, "123".to_string());
     }

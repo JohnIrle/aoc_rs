@@ -7,14 +7,12 @@ const BLUE_THRESHOLD: u32 = 14;
 pub struct Day2;
 
 impl Solution for Day2 {
-    fn part1(&self, input: &str) -> String {
-        let part1_total = get_total(input);
-        format!("Part one: {}", part1_total)
+    fn part_1(&self, input: &str) -> String {
+        get_total(input).to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
-        let part2_total = get_power_total(input);
-        format!("Part two: {}", part2_total)
+    fn part_2(&self, input: &str) -> String {
+        get_power_total(input).to_string()
     }
 }
 
@@ -103,11 +101,11 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 
     #[test]
     fn test_part_1() {
-        assert_eq!(get_total(INPUT), 8)
+        assert_eq!(Day2.part_1(INPUT), "8".to_string())
     }
 
     #[test]
     fn test_part_2() {
-        assert_eq!(get_power_total(INPUT), 2286)
+        assert_eq!(Day2.part_2(INPUT), "2286".to_string())
     }
 }

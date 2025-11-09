@@ -4,15 +4,16 @@ use regex::Regex;
 pub struct Day1;
 
 impl Solution for Day1 {
-    fn part1(&self, input: &str) -> String {
+    fn part_1(&self, input: &str) -> String {
         let sum_1: u32 = input
             .lines()
             .map(|l| parse_line(l, Regex::new(r"[0-9]").unwrap()))
             .sum();
-        format!("{}", sum_1)
+
+        sum_1.to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
+    fn part_2(&self, input: &str) -> String {
         let sum_2: u32 = input
             .lines()
             .map(|l| {
@@ -22,7 +23,8 @@ impl Solution for Day1 {
                 )
             })
             .sum();
-        format!("{}", sum_2)
+
+        sum_2.to_string()
     }
 }
 
@@ -73,7 +75,8 @@ pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet";
 
-        let sum_1 = Day1.part1(lines);
+        let sum_1 = Day1.part_1(lines);
+
         assert_eq!(sum_1, "142".to_string());
     }
 
@@ -87,7 +90,7 @@ xtwone3four
 zoneight234
 7pqrstsixteen";
 
-        let sum_2 = Day1.part2(lines);
+        let sum_2 = Day1.part_2(lines);
 
         assert_eq!(sum_2, "281".to_string());
     }

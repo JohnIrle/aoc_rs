@@ -20,8 +20,8 @@ fn main() {
     };
 
     let input = read_input(args.year, args.day);
-    println!("Part 1: {}", solution.part1(&input));
-    println!("Part 2: {}", solution.part2(&input));
+    println!("Part 1: {}", solution.part_1(&input));
+    println!("Part 2: {}", solution.part_2(&input));
 }
 
 fn lookup(day: u32, list: Vec<(u32, Box<dyn Solution>)>) -> Box<dyn Solution> {

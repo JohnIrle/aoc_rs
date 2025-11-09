@@ -1,8 +1,8 @@
 use std::fs;
 
 pub trait Solution {
-    fn part1(&self, input: &str) -> String;
-    fn part2(&self, input: &str) -> String;
+    fn part_1(&self, input: &str) -> String;
+    fn part_2(&self, input: &str) -> String;
 }
 
 pub fn read_input(year: u32, day: u32) -> String {

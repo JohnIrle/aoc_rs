@@ -4,14 +4,12 @@ use std::thread;
 pub struct Day5;
 
 impl Solution for Day5 {
-    fn part1(&self, input: &str) -> String {
-        let part1_sum = part_1(input);
-        format!("{}", part1_sum)
+    fn part_1(&self, input: &str) -> String {
+        part_1(input).to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
-        let part2_sum = part_2(input);
-        format!("{}", part2_sum)
+    fn part_2(&self, input: &str) -> String {
+        part_2(input).to_string()
     }
 }
 
@@ -161,11 +159,11 @@ humidity-to-location map:
 
     #[test]
     fn test_part_1() {
-        assert_eq!(Day5.part1(INPUT), "35".to_string());
+        assert_eq!(Day5.part_1(INPUT), "35".to_string());
     }
 
     #[test]
     fn test_part_2() {
-        assert_eq!(Day5.part2(INPUT), "46".to_string());
+        assert_eq!(Day5.part_2(INPUT), "46".to_string());
     }
 }

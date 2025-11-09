@@ -4,14 +4,12 @@ use regex::Regex;
 pub struct Day3;
 
 impl Solution for Day3 {
-    fn part1(&self, input: &str) -> String {
-        let part1_sum = part_1(input);
-        format!("{}", part1_sum)
+    fn part_1(&self, input: &str) -> String {
+        part_1(input).to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
-        let part2_sum = part_2(input);
-        format!("{}", part2_sum)
+    fn part_2(&self, input: &str) -> String {
+        part_2(input).to_string()
     }
 }
 
@@ -47,14 +45,16 @@ mod tests {
     #[test]
     fn part_1_should_return_161() {
         let input = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))";
-        let result = Day3.part1(input);
+        let result = Day3.part_1(input);
+
         assert_eq!(result, "161".to_string());
     }
 
     #[test]
     fn part_2_should_return_48() {
         let input = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
-        let result = Day3.part2(input);
+        let result = Day3.part_2(input);
+
         assert_eq!(result, "48".to_string());
     }
 }

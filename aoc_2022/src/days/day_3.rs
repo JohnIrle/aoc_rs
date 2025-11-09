@@ -3,11 +3,11 @@ use aoc_lib::Solution;
 pub struct Day3;
 
 impl Solution for Day3 {
-    fn part1(&self, input: &str) -> String {
-        format!("Part 1: {}", get_total(input))
+    fn part_1(&self, input: &str) -> String {
+        get_total(input).to_string()
     }
-    fn part2(&self, input: &str) -> String {
-        format!("Part 2: {}", get_total_for_three(input))
+    fn part_2(&self, input: &str) -> String {
+        get_total_for_three(input).to_string()
     }
 }
 
@@ -78,7 +78,7 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
         ";
 
-        assert_eq!(get_total(input), 157)
+        assert_eq!(Day3.part_1(input), "157".to_string())
     }
 
     #[test]
@@ -91,6 +91,6 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
 ";
 
-        assert_eq!(get_total_for_three(input), 70)
+        assert_eq!(Day3.part_2(input), "70".to_string())
     }
 }

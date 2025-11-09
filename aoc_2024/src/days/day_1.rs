@@ -6,14 +6,12 @@ use aoc_lib::Solution;
 pub struct Day1;
 
 impl Solution for Day1 {
-    fn part1(&self, input: &str) -> String {
-        let part1_sum = part_1(input);
-        format!("{}", part1_sum)
+    fn part_1(&self, input: &str) -> String {
+        part_1(input).to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
-        let part2_sum = part_2(input);
-        format!("{}", part2_sum)
+    fn part_2(&self, input: &str) -> String {
+        part_2(input).to_string()
     }
 }
 
@@ -65,17 +63,15 @@ mod tests {
 
     #[test]
     fn part1_returns_11_with_example_input() {
-        let input = INPUT;
+        let total = Day1.part_1(INPUT);
 
-        let total = Day1.part1(input);
         assert_eq!(total, "11".to_string());
     }
 
     #[test]
     fn part2_returns_31_with_example_input() {
-        let input = INPUT;
+        let total = Day1.part_2(INPUT);
 
-        let total = Day1.part2(input);
         assert_eq!(total, "31".to_string());
     }
 }

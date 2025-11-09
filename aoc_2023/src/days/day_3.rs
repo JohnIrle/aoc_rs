@@ -4,14 +4,12 @@ use regex::Regex;
 pub struct Day3;
 
 impl Solution for Day3 {
-    fn part1(&self, input: &str) -> String {
-        let part1_total = sum_adjacent_numbers(input);
-        format!("{}", part1_total)
+    fn part_1(&self, input: &str) -> String {
+        sum_adjacent_numbers(input).to_string()
     }
 
-    fn part2(&self, input: &str) -> String {
-        let part2_total = sum_gear_ratios(input);
-        format!("{}", part2_total)
+    fn part_2(&self, input: &str) -> String {
+        sum_gear_ratios(input).to_string()
     }
 }
 
@@ -224,11 +222,11 @@ mod tests {
 
     #[test]
     fn test_part_1() {
-        assert_eq!(Day3.part1(INPUT), "4361".to_string());
+        assert_eq!(Day3.part_1(INPUT), "4361".to_string());
     }
 
     #[test]
     fn test_part_2() {
-        assert_eq!(Day3.part2(INPUT), "467835".to_string());
+        assert_eq!(Day3.part_2(INPUT), "467835".to_string());
     }
 }
