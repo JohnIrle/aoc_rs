@@ -1,0 +1,36 @@
+---
+source: aoc_2023/src/days/day_3.rs
+expression: symbols
+---
+[
+    Symbol {
+        symbol: "*",
+        column: 3,
+        row: 1,
+    },
+    Symbol {
+        symbol: "#",
+        column: 6,
+        row: 3,
+    },
+    Symbol {
+        symbol: "*",
+        column: 3,
+        row: 4,
+    },
+    Symbol {
+        symbol: "+",
+        column: 5,
+        row: 5,
+    },
+    Symbol {
+        symbol: "$",
+        column: 3,
+        row: 8,
+    },
+    Symbol {
+        symbol: "*",
+        column: 5,
+        row: 8,
+    },
+]

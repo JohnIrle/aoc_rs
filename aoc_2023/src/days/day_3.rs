@@ -1,0 +1,234 @@
+use aoc_lib::Solution;
+use regex::Regex;
+
+pub struct Day3;
+
+impl Solution for Day3 {
+    fn part1(&self, input: &str) -> String {
+        let part1_total = sum_adjacent_numbers(input);
+        format!("{}", part1_total)
+    }
+
+    fn part2(&self, input: &str) -> String {
+        let part2_total = sum_gear_ratios(input);
+        format!("{}", part2_total)
+    }
+}
+
+#[derive(Debug)]
+struct Number {
+    number: u32,
+    start: isize,
+    end: isize,
+    row: isize,
+}
+
+impl Number {
+    fn new(number: u32, start: isize, end: isize, row: isize) -> Self {
+        Self {
+            number,
+            start,
+            end,
+            row,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct Symbol<'a> {
+    symbol: &'a str,
+    column: isize,
+    row: isize,
+}
+
+impl<'a> Symbol<'a> {
+    fn new(symbol: &'a str, column: isize, row: isize) -> Self {
+        Self {
+            symbol,
+            column,
+            row,
+        }
+    }
+}
+
+fn parse_numbers(input: &str) -> Vec<Number> {
+    let re = Regex::new(r"\d+").unwrap();
+    input
+        .lines()
+        .enumerate()
+        .flat_map(|(index, line)| {
+            re.find_iter(line)
+                .map(|m| {
+                    Number::new(
+                        m.as_str().parse().unwrap(),
+                        m.start() as isize,
+                        (m.end() - 1) as isize,
+                        index as isize,
+                    )
+                })
+                .collect::<Vec<Number>>()
+        })
+        .collect()
+}
+
+fn parse_symbols(input: &str) -> Vec<Symbol<'_>> {
+    let re = Regex::new(r"[+*=@&#$\-/%]+").unwrap();
+    input
+        .lines()
+        .enumerate()
+        .flat_map(|(index, line)| {
+            re.find_iter(line)
+                .map(|m| Symbol::new(m.as_str(), m.start() as isize, index as isize))
+                .collect::<Vec<Symbol>>()
+        })
+        .collect()
+}
+
+fn sum_adjacent_numbers(input: &str) -> u32 {
+    let numbers = parse_numbers(input);
+    let symbols = parse_symbols(input);
+
+    numbers
+        .iter()
+        .filter(|number| {
+            symbols
+                .iter()
+                .any(|symbol| symbol_adjacent_to_number(number, symbol))
+        })
+        .map(|number| number.number)
+        .sum()
+}
+
+fn sum_gear_ratios(input: &str) -> u32 {
+    let numbers = parse_numbers(input);
+    let symbols = parse_symbols(input);
+    let gears = symbols
+        .iter()
+        .filter(|&s| s.symbol == "*")
+        .collect::<Vec<&Symbol>>();
+    gears
+        .iter()
+        .map(|g| two_numbers_adjacent_to_gear(g, &numbers))
+        .sum()
+}
+
+fn symbol_adjacent_to_number(number: &Number, symbol: &Symbol) -> bool {
+    let is_adjacent_col = (number.start - 1..=number.end + 1).contains(&symbol.column);
+    let is_adjacent_row = (number.row - 1..=number.row + 1).contains(&symbol.row);
+
+    is_adjacent_col && is_adjacent_row
+}
+
+fn two_numbers_adjacent_to_gear(gear: &Symbol, numbers: &[Number]) -> u32 {
+    let adjacent_numbers = numbers
+        .iter()
+        .filter(|n| symbol_adjacent_to_number(n, gear))
+        .map(|n| n.number)
+        .collect::<Vec<u32>>();
+
+    match adjacent_numbers.len() {
+        2 => adjacent_numbers.iter().product::<u32>(),
+        _ => 0,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use insta::assert_debug_snapshot;
+
+    const INPUT: &str = r#"467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
+"#;
+
+    #[test]
+    fn test_check_bounds() {
+        let number = Number::new(467, 0, 2, 0);
+        let symbol = Symbol::new("+", 3, 1);
+
+        assert!(symbol_adjacent_to_number(&number, &symbol))
+    }
+
+    #[test]
+    fn test_check_bounds_above() {
+        let number = Number::new(467, 0, 2, 1);
+        let symbol = Symbol::new("-", 1, 0);
+
+        assert!(symbol_adjacent_to_number(&number, &symbol));
+    }
+
+    #[test]
+    fn test_check_bounds_no_hit() {
+        let number = Number::new(114, 5, 8, 0);
+        let symbol = Symbol::new("&", 3, 0);
+
+        assert!(!symbol_adjacent_to_number(&number, &symbol));
+    }
+
+    #[test]
+    fn test_parse_numbers_parses_one_line() {
+        let input = r#"467..114.."#;
+        let numbers = parse_numbers(input);
+        assert_debug_snapshot!(numbers, @r###"
+        [
+            Number {
+                number: 467,
+                start: 0,
+                end: 2,
+                row: 0,
+            },
+            Number {
+                number: 114,
+                start: 5,
+                end: 7,
+                row: 0,
+            },
+        ]
+        "###);
+    }
+
+    #[test]
+    fn test_parse_numbers_parses_multi_line() {
+        let numbers = parse_numbers(INPUT);
+        assert_debug_snapshot!(numbers);
+    }
+
+    #[test]
+    fn test_parse_numbers_parses_single_line() {
+        let input = r#"...*......"#;
+        let symbols = parse_symbols(input);
+        assert_debug_snapshot!(symbols, @r###"
+        [
+            Symbol {
+                symbol: "*",
+                column: 3,
+                row: 0,
+            },
+        ]
+        "###)
+    }
+
+    #[test]
+    fn test_parse_symbols_parses_multi_line() {
+        let symbols = parse_symbols(INPUT);
+        assert_debug_snapshot!(symbols);
+    }
+
+    #[test]
+    fn test_part_1() {
+        assert_eq!(Day3.part1(INPUT), "4361".to_string());
+    }
+
+    #[test]
+    fn test_part_2() {
+        assert_eq!(Day3.part2(INPUT), "467835".to_string());
+    }
+}

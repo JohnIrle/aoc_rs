@@ -14,6 +14,7 @@ fn main() {
 
     let solution: Box<dyn Solution> = match args.year {
         2022 => lookup(args.day, aoc_2022::solutions()),
+        2023 => lookup(args.day, aoc_2023::solutions()),
         _ => panic!("Year not supported"),
     };
 

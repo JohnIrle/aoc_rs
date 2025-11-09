@@ -1,0 +1,9 @@
+[package]
+name = "aoc_2023"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+aoc_lib = { path = "../aoc_lib" } 
+regex = "1"
+insta = "1"
