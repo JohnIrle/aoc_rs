@@ -18,8 +18,8 @@ impl Solution for Day1 {
 fn part_1(input: &str) -> i32 {
     let (mut left, mut right) = parse_lines(input);
 
-    left.sort();
-    right.sort();
+    left.sort_unstable();
+    right.sort_unstable();
 
     zip(left, right).map(|(a, b)| (a - b).abs()).sum()
 }
