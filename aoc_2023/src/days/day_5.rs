@@ -18,23 +18,22 @@ type Section = Vec<Row>;
 
 fn part_1(input: &str) -> u64 {
     let mut parts = input.split("\n\n");
-    let seeds = parse_seeds(parts.next().unwrap());
+    let seeds = parse_seeds(parts.next().expect("couldn't get first line"));
     let sections = parts.map(parse_section).collect::<Vec<Section>>();
 
     seeds
         .iter()
         .map(|&seed| get_lowest_location(seed, &sections))
         .min()
-        .unwrap()
+        .expect("couldn't find lowest location")
 }
 
 fn get_lowest_location(seed: u64, sections: &[Section]) -> u64 {
     sections.iter().fold(seed, |current_seed, section| {
         section
             .iter()
-            .fold(None, |result, &z| match result {
-                None => map_src_to_destination(current_seed, z),
-                Some(x) => Some(x),
+            .fold(None, |result, &z| {
+                result.map_or_else(|| map_src_to_destination(current_seed, z), Some)
             })
             .unwrap_or(current_seed)
     })
@@ -42,14 +41,14 @@ fn get_lowest_location(seed: u64, sections: &[Section]) -> u64 {
 
 fn part_2(input: &str) -> u64 {
     let mut parts = input.split("\n\n");
-    let seeds = parse_seeds(parts.next().unwrap());
+    let seeds = parse_seeds(parts.next().expect("couldn't get next part"));
     let sections = parts.map(parse_section).collect::<Vec<Section>>();
     let pairs = seeds
         .chunks(2)
         .map(|c| (c[0], c[0] + c[1]))
         .collect::<Vec<(u64, u64)>>();
     let mut handles = vec![];
-    for pair in pairs.clone() {
+    for pair in pairs {
         let sections_clone = sections.clone();
         let handle = thread::spawn(move || {
             let (from, to) = pair;
@@ -58,7 +57,7 @@ fn part_2(input: &str) -> u64 {
             for i in from..to {
                 let lowest = get_lowest_location(i, &sections_clone);
                 if lowest < result {
-                    result = lowest
+                    result = lowest;
                 }
             }
             println!("{result}");
@@ -67,12 +66,12 @@ fn part_2(input: &str) -> u64 {
     }
 
     for handle in handles {
-        handle.join().unwrap();
+        handle.join().expect("couldn't join handles.");
     }
     0
 }
 
-fn map_src_to_destination(incoming: u64, map_section: Row) -> Option<u64> {
+const fn map_src_to_destination(incoming: u64, map_section: Row) -> Option<u64> {
     match map_section {
         (dst, src, range) if src <= incoming && incoming <= (src + range) => {
             Some(dst + incoming - src)
@@ -86,7 +85,13 @@ fn parse_section(input: &str) -> Section {
         .split('\n')
         .skip(1)
         .map(|i| i.split_whitespace().filter_map(|x| x.parse::<u64>().ok()))
-        .map(|mut x| (x.next().unwrap(), x.next().unwrap(), x.next().unwrap()))
+        .map(|mut x| {
+            (
+                x.next().expect("couldn't get section.0"),
+                x.next().expect("couldn't get section.1"),
+                x.next().expect("couldn't get section.2"),
+            )
+        })
         .collect()
 }
 
@@ -94,7 +99,7 @@ fn parse_seeds(input: &str) -> Vec<u64> {
     let mut seed_line = input.split(": ").skip(1);
     seed_line
         .next()
-        .unwrap()
+        .expect("couldn't get seed line")
         .split_whitespace()
         .filter_map(|x| x.parse::<u64>().ok())
         .collect()
