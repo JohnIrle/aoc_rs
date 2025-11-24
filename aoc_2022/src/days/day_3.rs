@@ -17,7 +17,7 @@ fn get_total(input: &str) -> usize {
     input
         .lines()
         .filter_map(|x| {
-            find_intersection(x.to_string()).and_then(|c| ALPHABET.find(c).map(|x| x + 1))
+            find_intersection(x).and_then(|c| ALPHABET.find(c).map(|x| x + 1))
         })
         .sum()
 }
@@ -34,7 +34,7 @@ fn get_total_for_three(input: &str) -> usize {
         .sum()
 }
 
-fn find_intersection(line: String) -> Option<char> {
+fn find_intersection(line: &str) -> Option<char> {
     let m = line.len() / 2;
 
     for c1 in line[..m].chars() {
@@ -78,7 +78,7 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
         ";
 
-        assert_eq!(Day3.part_1(input), "157".to_string())
+        assert_eq!(Day3.part_1(input), "157".to_string());
     }
 
     #[test]
@@ -91,6 +91,6 @@ ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
 ";
 
-        assert_eq!(Day3.part_2(input), "70".to_string())
+        assert_eq!(Day3.part_2(input), "70".to_string());
     }
 }
