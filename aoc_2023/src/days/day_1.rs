@@ -7,7 +7,7 @@ impl Solution for Day1 {
     fn part_1(&self, input: &str) -> String {
         let sum_1: u32 = input
             .lines()
-            .map(|l| parse_line(l, Regex::new(r"[0-9]").unwrap()))
+            .map(|l| parse_line(l, &Regex::new(r"[0-9]").expect("Invalid regex")))
             .sum();
 
         sum_1.to_string()
@@ -19,7 +19,8 @@ impl Solution for Day1 {
             .map(|l| {
                 parse_line(
                     l,
-                    Regex::new(r"[0-9]|one|two|three|four|five|six|seven|eight|nine").unwrap(),
+                    &Regex::new(r"[0-9]|one|two|three|four|five|six|seven|eight|nine")
+                        .expect("Invalid regex"),
                 )
             })
             .sum();
@@ -28,7 +29,7 @@ impl Solution for Day1 {
     }
 }
 
-fn parse_line(line: &str, regex: Regex) -> u32 {
+fn parse_line(line: &str, regex: &Regex) -> u32 {
     let words = parse_words(line, regex);
 
     let numbers: Vec<u32> = words.iter().map(|w| word_to_value(w)).collect();
@@ -39,11 +40,11 @@ fn parse_line(line: &str, regex: Regex) -> u32 {
     first * 10 + last
 }
 
-fn parse_words(line: &str, re: Regex) -> Vec<&str> {
+fn parse_words<'a>(line: &'a str, re: &'a Regex) -> Vec<&'a str> {
     let mut words: Vec<&str> = Vec::new();
     for i in 0..line.len() {
         if let Some(word) = re.find(&line[i..]) {
-            words.push(word.as_str())
+            words.push(word.as_str());
         }
     }
     words
@@ -60,7 +61,7 @@ fn word_to_value(word: &str) -> u32 {
         "seven" => 7,
         "eight" => 8,
         "nine" => 9,
-        x => x.parse::<u32>().unwrap(),
+        x => x.parse::<u32>().expect("Could not parse word to value"),
     }
 }
 
