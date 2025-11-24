@@ -15,37 +15,31 @@ fn total_points(input: &str) -> usize {
     let mut total = 0;
     for line in input.lines() {
         let (winning_numbers, cards) = parse_line(line);
-        let winners_score = cards
-            .iter()
-            .filter(|card| winning_numbers.contains(card))
-            .collect::<Vec<_>>();
-        match winners_score.len() {
+        let winners_score = cards.iter().filter(|card| winning_numbers.contains(card));
+        match winners_score.count() {
             0 => {}
             1 => total += 1,
-            n => total += 2_usize.pow(n as u32 - 1),
+            n => total += 2_usize.pow(u32::try_from(n).expect("could not get u32") - 1),
         }
     }
     total
 }
 
 fn total_cards(input: &str) -> usize {
-    let mut cards_at_index = vec![1; input.lines().collect::<Vec<_>>().len()];
+    let mut cards_at_index = vec![1; input.lines().count()];
 
     input.lines().enumerate().for_each(|(index, line)| {
         let (winning_numbers, cards) = parse_line(line);
-        let winners_score = cards
-            .iter()
-            .filter(|card| winning_numbers.contains(card))
-            .collect::<Vec<_>>();
+        let winners_score = cards.iter().filter(|card| winning_numbers.contains(card));
 
-        let num_winners = winners_score.len();
+        let num_winners = winners_score.count();
         let number_of_cards_at_index = cards_at_index.get(index);
 
         if let Some(number) = number_of_cards_at_index {
             for _ in 0..*number {
                 for i in 0..num_winners {
                     if let Some(value) = cards_at_index.get_mut((index + i) + 1) {
-                        *value += 1
+                        *value += 1;
                     }
                 }
             }
@@ -58,7 +52,10 @@ fn total_cards(input: &str) -> usize {
 fn parse_line(line: &str) -> (Vec<&str>, Vec<&str>) {
     let numbers = line.split(':').collect::<Vec<&str>>()[1].trim();
     let mut rest = numbers.split(" | ");
-    let (winning, cards) = (rest.next().unwrap(), rest.next().unwrap());
+    let (winning, cards) = (
+        rest.next().expect("couldn't get winning"),
+        rest.next().expect("couldn't get cards"),
+    );
 
     (
         winning.split_whitespace().collect(),
