@@ -16,7 +16,7 @@ impl Solution for Day2 {
     }
 }
 
-fn get_total(input: &str) -> u32 {
+fn get_total(input: &str) -> usize {
     input
         .lines()
         .enumerate()
@@ -24,11 +24,11 @@ fn get_total(input: &str) -> u32 {
             let game_number = index + 1;
             let cubes = parse_cubes(line);
             if cubes.iter().all(|c| !is_over_threshold(*c)) {
-                return game_number as u32;
+                return game_number;
             }
             0
         })
-        .sum::<u32>()
+        .sum::<usize>()
 }
 
 fn is_over_threshold((qty, color): (u32, &str)) -> bool {
@@ -45,7 +45,9 @@ fn parse_cubes(line: &str) -> Vec<(u32, &str)> {
     let sets = game.split("; ");
     let cubes = sets.flat_map(|s| s.split(", ")).filter_map(|c| {
         let mut parts = c.split(' ');
-        let qty = parts.next().map(|q| q.parse::<u32>().unwrap());
+        let qty = parts
+            .next()
+            .map(|q| q.parse::<u32>().expect("could not parse qty"));
         let color = parts.next();
         match (qty, color) {
             (Some(qty), Some(color)) => Some((qty, color)),
@@ -67,17 +69,17 @@ fn get_power_total(input: &str) -> u32 {
                 match color {
                     "red" => {
                         if qty > max_red {
-                            max_red = qty
+                            max_red = qty;
                         }
                     }
                     "green" => {
                         if qty > max_green {
-                            max_green = qty
+                            max_green = qty;
                         }
                     }
                     "blue" => {
                         if qty > max_blue {
-                            max_blue = qty
+                            max_blue = qty;
                         }
                     }
                     _ => unreachable!(),
@@ -92,20 +94,20 @@ fn get_power_total(input: &str) -> u32 {
 mod tests {
     use super::*;
 
-    const INPUT: &str = r#"Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+    const INPUT: &str = r"Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
 Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
 Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
 Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
-"#;
+";
 
     #[test]
     fn test_part_1() {
-        assert_eq!(Day2.part_1(INPUT), "8".to_string())
+        assert_eq!(Day2.part_1(INPUT), "8".to_string());
     }
 
     #[test]
     fn test_part_2() {
-        assert_eq!(Day2.part_2(INPUT), "2286".to_string())
+        assert_eq!(Day2.part_2(INPUT), "2286".to_string());
     }
 }
