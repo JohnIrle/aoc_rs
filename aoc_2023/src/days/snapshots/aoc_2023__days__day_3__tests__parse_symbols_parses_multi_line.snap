@@ -4,32 +4,32 @@ expression: symbols
 ---
 [
     Symbol {
-        symbol: "*",
+        item: "*",
         column: 3,
         row: 1,
     },
     Symbol {
-        symbol: "#",
+        item: "#",
         column: 6,
         row: 3,
     },
     Symbol {
-        symbol: "*",
+        item: "*",
         column: 3,
         row: 4,
     },
     Symbol {
-        symbol: "+",
+        item: "+",
         column: 5,
         row: 5,
     },
     Symbol {
-        symbol: "$",
+        item: "$",
         column: 3,
         row: 8,
     },
     Symbol {
-        symbol: "*",
+        item: "*",
         column: 5,
         row: 8,
     },

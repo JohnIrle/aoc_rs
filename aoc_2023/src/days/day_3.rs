@@ -40,12 +40,8 @@ struct Symbol<'a> {
 }
 
 impl<'a> Symbol<'a> {
-    const fn new(symbol: &'a str, column: isize, row: isize) -> Self {
-        Self {
-            item: symbol,
-            column,
-            row,
-        }
+    const fn new(item: &'a str, column: isize, row: isize) -> Self {
+        Self { item, column, row }
     }
 }
 
@@ -60,7 +56,7 @@ fn parse_numbers(input: &str) -> Vec<Number> {
                     Number::new(
                         m.as_str().parse().expect("Invalid number"),
                         isize::try_from(m.start()).expect("could not get i32"),
-                        isize::try_from(m.end()).expect("could not get i32"),
+                        isize::try_from(m.end() - 1).expect("could not get i32"),
                         isize::try_from(index).expect("could not get i32"),
                     )
                 })
@@ -181,22 +177,22 @@ mod tests {
     fn test_parse_numbers_parses_one_line() {
         let input = r"467..114..";
         let numbers = parse_numbers(input);
-        assert_debug_snapshot!(numbers, @r###"
+        assert_debug_snapshot!(numbers, @r"
         [
             Number {
-                number: 467,
+                value: 467,
                 start: 0,
                 end: 2,
                 row: 0,
             },
             Number {
-                number: 114,
+                value: 114,
                 start: 5,
                 end: 7,
                 row: 0,
             },
         ]
-        "###);
+        ");
     }
 
     #[test]
@@ -209,15 +205,15 @@ mod tests {
     fn test_parse_numbers_parses_single_line() {
         let input = r"...*......";
         let symbols = parse_symbols(input);
-        assert_debug_snapshot!(symbols, @r###"
+        assert_debug_snapshot!(symbols, @r#"
         [
             Symbol {
-                symbol: "*",
+                item: "*",
                 column: 3,
                 row: 0,
             },
         ]
-        "###);
+        "#);
     }
 
     #[test]
