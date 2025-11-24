@@ -27,7 +27,7 @@ fn part_1(input: &str) -> i32 {
     let cols = chars[0].len();
 
     // Horizontal
-    for row in chars.iter() {
+    for row in &chars {
         for window in row.windows(forward.len()) {
             match window {
                 w if w == forward => total += 1,
