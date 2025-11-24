@@ -82,7 +82,7 @@ fn get_passing_and_non_passing_updates(
         if is_successful {
             passing_updates.push(update);
         } else {
-            non_passing_updates.push(update)
+            non_passing_updates.push(update);
         }
     }
     (passing_updates, non_passing_updates)
