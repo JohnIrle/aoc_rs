@@ -15,16 +15,16 @@ impl Solution for Day3 {
 
 #[derive(Debug)]
 struct Number {
-    number: u32,
+    value: u32,
     start: isize,
     end: isize,
     row: isize,
 }
 
 impl Number {
-    fn new(number: u32, start: isize, end: isize, row: isize) -> Self {
+    const fn new(value: u32, start: isize, end: isize, row: isize) -> Self {
         Self {
-            number,
+            value,
             start,
             end,
             row,
@@ -34,15 +34,15 @@ impl Number {
 
 #[derive(Debug)]
 struct Symbol<'a> {
-    symbol: &'a str,
+    item: &'a str,
     column: isize,
     row: isize,
 }
 
 impl<'a> Symbol<'a> {
-    fn new(symbol: &'a str, column: isize, row: isize) -> Self {
+    const fn new(symbol: &'a str, column: isize, row: isize) -> Self {
         Self {
-            symbol,
+            item: symbol,
             column,
             row,
         }
@@ -50,7 +50,7 @@ impl<'a> Symbol<'a> {
 }
 
 fn parse_numbers(input: &str) -> Vec<Number> {
-    let re = Regex::new(r"\d+").unwrap();
+    let re = Regex::new(r"\d+").expect("Invalid number regex");
     input
         .lines()
         .enumerate()
@@ -58,10 +58,10 @@ fn parse_numbers(input: &str) -> Vec<Number> {
             re.find_iter(line)
                 .map(|m| {
                     Number::new(
-                        m.as_str().parse().unwrap(),
-                        m.start() as isize,
-                        (m.end() - 1) as isize,
-                        index as isize,
+                        m.as_str().parse().expect("Invalid number"),
+                        isize::try_from(m.start()).expect("could not get i32"),
+                        isize::try_from(m.end()).expect("could not get i32"),
+                        isize::try_from(index).expect("could not get i32"),
                     )
                 })
                 .collect::<Vec<Number>>()
@@ -70,13 +70,19 @@ fn parse_numbers(input: &str) -> Vec<Number> {
 }
 
 fn parse_symbols(input: &str) -> Vec<Symbol<'_>> {
-    let re = Regex::new(r"[+*=@&#$\-/%]+").unwrap();
+    let re = Regex::new(r"[+*=@&#$\-/%]+").expect("could not get regex");
     input
         .lines()
         .enumerate()
         .flat_map(|(index, line)| {
             re.find_iter(line)
-                .map(|m| Symbol::new(m.as_str(), m.start() as isize, index as isize))
+                .map(|m| {
+                    Symbol::new(
+                        m.as_str(),
+                        isize::try_from(m.start()).expect("could not get isize"),
+                        isize::try_from(index).expect("could not get isize"),
+                    )
+                })
                 .collect::<Vec<Symbol>>()
         })
         .collect()
@@ -93,7 +99,7 @@ fn sum_adjacent_numbers(input: &str) -> u32 {
                 .iter()
                 .any(|symbol| symbol_adjacent_to_number(number, symbol))
         })
-        .map(|number| number.number)
+        .map(|number| number.value)
         .sum()
 }
 
@@ -102,7 +108,7 @@ fn sum_gear_ratios(input: &str) -> u32 {
     let symbols = parse_symbols(input);
     let gears = symbols
         .iter()
-        .filter(|&s| s.symbol == "*")
+        .filter(|&s| s.item == "*")
         .collect::<Vec<&Symbol>>();
     gears
         .iter()
@@ -121,7 +127,7 @@ fn two_numbers_adjacent_to_gear(gear: &Symbol, numbers: &[Number]) -> u32 {
     let adjacent_numbers = numbers
         .iter()
         .filter(|n| symbol_adjacent_to_number(n, gear))
-        .map(|n| n.number)
+        .map(|n| n.value)
         .collect::<Vec<u32>>();
 
     match adjacent_numbers.len() {
@@ -135,7 +141,7 @@ mod tests {
     use super::*;
     use insta::assert_debug_snapshot;
 
-    const INPUT: &str = r#"467..114..
+    const INPUT: &str = r"467..114..
 ...*......
 ..35..633.
 ......#...
@@ -145,14 +151,14 @@ mod tests {
 ......755.
 ...$.*....
 .664.598..
-"#;
+";
 
     #[test]
     fn test_check_bounds() {
         let number = Number::new(467, 0, 2, 0);
         let symbol = Symbol::new("+", 3, 1);
 
-        assert!(symbol_adjacent_to_number(&number, &symbol))
+        assert!(symbol_adjacent_to_number(&number, &symbol));
     }
 
     #[test]
@@ -173,7 +179,7 @@ mod tests {
 
     #[test]
     fn test_parse_numbers_parses_one_line() {
-        let input = r#"467..114.."#;
+        let input = r"467..114..";
         let numbers = parse_numbers(input);
         assert_debug_snapshot!(numbers, @r###"
         [
@@ -201,7 +207,7 @@ mod tests {
 
     #[test]
     fn test_parse_numbers_parses_single_line() {
-        let input = r#"...*......"#;
+        let input = r"...*......";
         let symbols = parse_symbols(input);
         assert_debug_snapshot!(symbols, @r###"
         [
@@ -211,7 +217,7 @@ mod tests {
                 row: 0,
             },
         ]
-        "###)
+        "###);
     }
 
     #[test]
