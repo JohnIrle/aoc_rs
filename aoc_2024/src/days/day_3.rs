@@ -18,13 +18,13 @@ fn part_1(input: &str) -> i32 {
 }
 
 fn part_2(input: &str) -> i32 {
-    let re = Regex::new(r"don't\(\)[\s\S]*?do\(\)").unwrap();
+    let re = Regex::new(r"don't\(\)[\s\S]*?do\(\)").expect("Invalid regex");
     let replaced = re.replace_all(input, "").to_string();
     sum_instructions(&replaced)
 }
 
 fn sum_instructions(input: &str) -> i32 {
-    let re = Regex::new(r"mul\((\d+),(\d+)\)").unwrap();
+    let re = Regex::new(r"mul\((\d+),(\d+)\)").expect("Invalid regex");
     re.captures_iter(input)
         .filter_map(|cap| {
             let num1 = cap[1].parse::<i32>().ok();
