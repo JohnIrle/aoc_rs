@@ -27,6 +27,5 @@ fn main() {
 fn lookup(day: u32, list: Vec<(u32, Box<dyn Solution>)>) -> Box<dyn Solution> {
     list.into_iter()
         .find(|(d, _)| *d == day)
-        .map(|(_, s)| s)
-        .unwrap_or_else(|| panic!("Day {} not implemented", day))
+        .map_or_else(|| panic!("Day {day} not implemented"), |(_, s)| s)
 }
