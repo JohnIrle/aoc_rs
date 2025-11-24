@@ -5,6 +5,10 @@ pub trait Solution {
     fn part_2(&self, input: &str) -> String;
 }
 
+/// # Panics
+///
+/// Will panic if path to file not found.
+#[must_use]
 pub fn read_input(year: u32, day: u32) -> String {
     let path = format!("inputs/{year}/day{day}.txt");
     fs::read_to_string(path).expect("Failed to read input file")
