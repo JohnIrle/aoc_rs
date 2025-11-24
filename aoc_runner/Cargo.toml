@@ -9,3 +9,6 @@ aoc_2022 = { path = "../aoc_2022" }
 aoc_2023 = { path = "../aoc_2023" }
 aoc_2024 = { path = "../aoc_2024" }
 clap = { version = "4", features = ["derive"] }
+
+[lints]
+workspace = true

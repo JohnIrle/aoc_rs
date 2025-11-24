@@ -1,4 +1,9 @@
 [workspace]
 resolver = "3"
-members = ["aoc_2022", "aoc_2023", "aoc_2024","aoc_lib", "aoc_runner"]
+members = ["aoc_2022", "aoc_2023", "aoc_2024", "aoc_lib", "aoc_runner"]
+
+[workspace.lints.clippy]
+pedantic = { priority = -1, level = "deny" }
+nursery = { priority = -1, level = "deny" }
+unwrap_used = "deny"
 
