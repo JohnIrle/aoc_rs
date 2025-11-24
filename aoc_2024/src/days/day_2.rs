@@ -12,14 +12,14 @@ impl Solution for Day2 {
     }
 }
 
-fn part_1(input: &str) -> i32 {
+fn part_1(input: &str) -> usize {
     input
         .lines()
-        .filter(|line| is_line_safe(parse_level(line)))
-        .count() as i32
+        .filter(|line| is_line_safe(&parse_level(line)))
+        .count()
 }
 
-fn part_2(input: &str) -> i32 {
+fn part_2(input: &str) -> usize {
     input
         .lines()
         .filter(|line| {
@@ -27,13 +27,13 @@ fn part_2(input: &str) -> i32 {
                 let sub_line: Vec<_> = parse_level(line)
                     .iter()
                     .enumerate()
-                    .filter_map(|(j, x)| if i != j { Some(*x) } else { None })
+                    .filter_map(|(j, x)| if i == j { None } else { Some(*x) })
                     .collect();
 
-                is_line_safe(sub_line)
+                is_line_safe(&sub_line)
             })
         })
-        .count() as i32
+        .count()
 }
 
 fn parse_level(line: &str) -> Vec<i32> {
@@ -42,7 +42,7 @@ fn parse_level(line: &str) -> Vec<i32> {
         .collect()
 }
 
-fn is_line_safe(level: Vec<i32>) -> bool {
+fn is_line_safe(level: &[i32]) -> bool {
     let mut safe = true;
     let mut is_up = true;
     let mut is_down = true;
