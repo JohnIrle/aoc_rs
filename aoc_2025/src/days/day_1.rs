@@ -135,10 +135,10 @@ L82";
 
     #[test]
     fn count_wraps_correctly_counts_left() {
-        let zero_wrap = count_wraps(&Direction::Left, 0, 5);
-        let one_wrap = count_wraps(&Direction::Left, 50, 68);
+        let one_wrap = count_wraps(&Direction::Left, 0, 5);
+        assert_eq!(one_wrap, 1);
 
-        assert_eq!(zero_wrap, 1);
+        let one_wrap = count_wraps(&Direction::Left, 50, 68);
         assert_eq!(one_wrap, 1);
     }
 
