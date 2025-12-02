@@ -16,6 +16,7 @@ fn main() {
         2022 => lookup(args.day, aoc_2022::solutions()),
         2023 => lookup(args.day, aoc_2023::solutions()),
         2024 => lookup(args.day, aoc_2024::solutions()),
+        2025 => lookup(args.day, aoc_2025::solutions()),
         _ => panic!("Year not supported"),
     };
 
