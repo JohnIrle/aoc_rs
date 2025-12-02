@@ -20,22 +20,24 @@ impl Solution for Day1 {
     }
 
     fn part_2(&self, input: &str) -> String {
-        let lines = parse_lines(input);
+        let mut current = 50_isize;
+        let mut counter = 0;
+        for direction in parse_lines(input) {
+            let (dir, amount) = match direction {
+                Direction::Left(amt) => (-1, amt),
+                Direction::Right(amt) => (1, amt),
+            };
 
-        let mut current = 50;
-        let mut num_zeros = 0;
-
-        for direction in lines {
-            let next_location = get_next_location(&direction, current);
-
-            let num_wraps = count_wraps(&direction, current);
-            println!("Dir: {direction:?}, start: {current}, {num_wraps}");
-            num_zeros += num_wraps;
-
-            current = next_location;
+            let mut amount = amount;
+            while amount > 0 {
+                current = (current + dir).rem_euclid(100);
+                if current == 0 {
+                    counter += 1;
+                }
+                amount -= 1;
+            }
         }
-
-        num_zeros.to_string()
+        counter.to_string()
     }
 }
 
@@ -49,19 +51,6 @@ fn get_next_location(direction: &Direction, start: i32) -> i32 {
     match direction {
         Direction::Left(amount) => (start - amount).rem_euclid(100),
         Direction::Right(amount) => (start + amount).rem_euclid(100),
-    }
-}
-
-fn count_wraps(direction: &Direction, starting: i32) -> i32 {
-    match direction {
-        Direction::Right(amount) => (starting + amount) / 100,
-        Direction::Left(amount) => {
-            if *amount <= starting {
-                0
-            } else {
-                (amount - starting + 99) / 100
-            }
-        }
     }
 }
 
@@ -131,26 +120,6 @@ L82";
         let result = get_next_location(&Direction::Left(1), 0);
 
         assert_eq!(result, 99);
-    }
-
-    #[test]
-    fn count_wraps_correctly_counts_left() {
-        let one_wrap = count_wraps(&Direction::Left(5), 0);
-        assert_eq!(one_wrap, 1);
-
-        let one_wrap = count_wraps(&Direction::Left(68), 50);
-        assert_eq!(one_wrap, 1);
-    }
-
-    #[test]
-    fn count_wraps_correctly_counts_right() {
-        let zero_wrap = count_wraps(&Direction::Right(10), 3);
-        let two_wrap = count_wraps(&Direction::Right(210), 3);
-        let ten_wrap = count_wraps(&Direction::Right(1000), 50);
-
-        assert_eq!(zero_wrap, 0);
-        assert_eq!(two_wrap, 2);
-        assert_eq!(ten_wrap, 10);
     }
 
     #[test]
